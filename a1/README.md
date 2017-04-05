@@ -6,6 +6,8 @@ Special thanks to Igor Minar, lead on the Angular team, for reviewing, contribut
 ## Purpose
 *Opinionated Angular style guide for teams by [@john_papa](//twitter.com/john_papa)*
 
+_Customized for Uptake. Join #dev-frontend on slack for more info or suggestions_
+
 If you are looking for an opinionated style guide for syntax, conventions, and structuring Angular applications, then step right in. These styles are based on my development experience with [Angular](//angularjs.org), presentations, [Pluralsight training courses](http://app.pluralsight.com/author/john-papa) and working in teams.
 
 The purpose of this style guide is to provide guidance on building Angular applications by showing the conventions I use and, more importantly, why I choose them.
@@ -22,6 +24,7 @@ Many of my styles have been from the many pair programming sessions [Ward Bell](
 ## See the Styles in a Sample App
 While this guide explains the *what*, *why* and *how*, I find it helpful to see them in practice. This guide is accompanied by a sample application that follows these styles and patterns. You can find the [sample application (named modular) here](https://github.com/johnpapa/ng-demos) in the `modular` folder. Feel free to grab it, clone it, or fork it. [Instructions on running it are in its readme](https://github.com/johnpapa/ng-demos/tree/master/modular).
 
+_Uptake specific style changes are called out wherever required._
 ##Translations
 [Translations of this Angular style guide](https://github.com/johnpapa/angular-styleguide/tree/master/a1/i18n) are maintained by the community and can be found here.
 
@@ -647,14 +650,14 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 
   ```javascript
   /* recommended */
-  function OrderController(creditService) {
+  function OrderController(upCreditService) {
       var vm = this;
       vm.checkCredit = checkCredit;
       vm.isCreditOk;
       vm.total = 0;
 
       function checkCredit() {
-         return creditService.isOrderTotalOk(vm.total)
+         return upCreditService.isOrderTotalOk(vm.total)
             .then(function(isOk) { vm.isCreditOk = isOk; })
             .catch(showError);
       };
@@ -1950,7 +1953,9 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 ### Naming Guidelines
 ###### [Style [Y120](#style-y120)]
 
+  - Uptake: Look for Uptake specific changes to function names in this section.
   - Use consistent names for all components following a pattern that describes the component's feature then (optionally) its type. My recommended pattern is `feature.type.js`. There are 2 names for most assets:
+  
     * the file name (`avengers.controller.js`)
     * the registered component name with Angular (`AvengersController`)
 
@@ -2049,6 +2054,8 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 
   - Use consistent names for all controllers named after their feature. Use UpperCamelCase for controllers, as they are constructors.
 
+    *Uptake Note*: All controller names need to be suffixed with `Up`.
+
     *Why?*: Provides a consistent way to quickly identify and reference controllers.
 
     *Why?*: UpperCamelCase is conventional for identifying object that can be instantiated using a constructor.
@@ -2061,9 +2068,9 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
     // avengers.controller.js
     angular
         .module
-        .controller('HeroAvengersController', HeroAvengersController);
+        .controller('UpHeroAvengersController', UpHeroAvengersController);
 
-    function HeroAvengersController() { }
+    function UpHeroAvengersController() { }
     ```
 
 ### Controller Name Suffix
@@ -2090,6 +2097,8 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 ###### [Style [Y125](#style-y125)]
 
   - Use consistent names for all factories and services named after their feature. Use camel-casing for services and factories. Avoid prefixing factories and services with `$`. Only suffix service and factories with `Service` when it is not clear what they are (i.e. when they are nouns).
+
+    *Uptake Note*: Prefix service names with `up`.
 
     *Why?*: Provides a consistent way to quickly identify and reference factories.
 
@@ -2120,22 +2129,24 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
     // credit.service.js
     angular
         .module
-        .factory('creditService', creditService);
+        .factory('upCreditService', upCreditService);
 
-    function creditService() { }
+    function upCreditService() { }
 
     // customer.service.js
     angular
         .module
-        .service('customerService', customerService);
+        .service('upCustomerService', upCustomerService);
 
-    function customerService() { }
+    function upCustomerService() { }
     ```
 
 ### Directive Component Names
 ###### [Style [Y126](#style-y126)]
 
   - Use consistent names for all directives using camel-case. Use a short prefix to describe the area that the directives belong (some example are company prefix or project prefix).
+
+    *Uptake Note*: Prefix directive names with `up`. The function name should be the same as the directive name.
 
     *Why?*: Provides a consistent way to quickly identify and reference components.
 
@@ -2147,15 +2158,17 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
     // avenger-profile.directive.js
     angular
         .module
-        .directive('xxAvengerProfile', xxAvengerProfile);
+        .directive('upxxAvengerProfile', upxxAvengerProfile);
 
-    // usage is <xx-avenger-profile> </xx-avenger-profile>
+    // usage is <up-xx-avenger-profile> </up-xx-avenger-profile>
 
-    function xxAvengerProfile() { }
+    function upxxAvengerProfile() { }
     ```
 
 ### Modules
 ###### [Style [Y127](#style-y127)]
+
+  - Uptake's Front end application inherits from `up-ui-core`. This is also where the main `ng-app` definition lives. All of the modules should be defined as children of the `up` module. 
 
   - When there are multiple modules, the main module file is named `app.module.js` while other dependent modules are named after what they represent. For example, an admin module is named `admin.module.js`. The respective registered module names would be `app` and `admin`.
 
@@ -2165,7 +2178,7 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 
 ### Configuration
 ###### [Style [Y128](#style-y128)]
-
+    // TODO: Update this, not used at Uptake. 
   - Separate configuration for a module into its own file named after the module. A configuration file for the main `app` module is named `app.config.js` (or simply `config.js`). A configuration for a module named `admin.module.js` is named `admin.config.js`.
 
     *Why?*: Separates configuration from module definition, components, and active code.
@@ -2175,6 +2188,7 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 ### Routes
 ###### [Style [Y129](#style-y129)]
 
+    // TODO: Update this, not used at Uptake. 
   - Separate route configuration into its own file. Examples might be `app.route.js` for the main module and `admin.route.js` for the `admin` module. Even in smaller apps I prefer this separation from the rest of the configuration.
 
 **[Back to top](#table-of-contents)**
@@ -2201,21 +2215,18 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 
     *Why?*: I find this to be super important for a project. If the team cannot find the files they need to work on quickly, they will not be able to work as efficiently as possible, and the structure needs to change. You may not know the file name or where its related files are, so putting them in the most intuitive locations and near each other saves a ton of time. A descriptive folder structure can help with this.
 
+    *Uptake Note*: The directory structure below has been modified to meet our standards.
+
     ```
     /bower_components
-    /client
-      /app
-        /avengers
-        /blocks
-          /exception
-          /logger
-        /core
-        /dashboard
-        /data
-        /layout
-        /widgets
-      /content
-      index.html
+    /src
+      /components
+        /notification-service
+        /confirmation-modal
+        /navigation
+      /tools
+        /asset-management
+        /task-management
     .bower.json
     ```
 
@@ -2254,6 +2265,7 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 ### Layout
 ###### [Style [Y151](#style-y151)]
 
+    // TODO: Revisit this. Gather more views maybe?
   - Place components that define the overall layout of the application in a folder named `layout`. These may include a shell view and controller may act as the container for the app, navigation, menus, content areas, and other regions.
 
     *Why?*: Organizes all layout in a single place re-used throughout the application.
@@ -2271,43 +2283,25 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 
     *Why?*: When there are a lot of files (10+) locating them is easier with a consistent folder structures and more difficult in flat structures.
 
+    *Uptake Note*: The following directory structure has been modified to fit Uptake's usage and standards.
     ```javascript
     /**
      * recommended
      */
 
-    app/
-        app.module.js
-        app.config.js
+    src/
         components/
-            calendar.directive.js
-            calendar.directive.html
-            user-profile.directive.js
-            user-profile.directive.html
-        layout/
-            shell.html
-            shell.controller.js
-            topnav.html
-            topnav.controller.js
-        people/
-            attendees.html
-            attendees.controller.js
-            people.routes.js
-            speakers.html
-            speakers.controller.js
-            speaker-detail.html
-            speaker-detail.controller.js
-        services/
-            data.service.js
-            localstorage.service.js
-            logger.service.js
-            spinner.service.js
-        sessions/
-            sessions.html
-            sessions.controller.js
-            sessions.routes.js
-            session-detail.html
-            session-detail.controller.js
+            notification-service/
+                notification.service.js
+                notification.module.js
+        tools/
+            asset-management/
+                components/
+                features/
+                    asset/
+                    events/
+                    ...
+                asset-management.module.js
     ```
 
       ![Sample App Structure](https://raw.githubusercontent.com/johnpapa/angular-styleguide/master/a1/assets/modularity-2.png)
@@ -2367,6 +2361,8 @@ While this guide explains the *what*, *why* and *how*, I find it helpful to see 
 
 ### Create an App Module
 ###### [Style [Y161](#style-y161)]
+
+  -  *Uptake Note*: This is already taken care of by `up-ui-core`.
 
   - Create an application root module whose role is to pull together all of the modules and features of your application. Name this for your application.
 
@@ -2504,6 +2500,7 @@ Unit testing helps maintain clean code, as such I included some of my recommenda
 ### Write Tests with Stories
 ###### [Style [Y190](#style-y190)]
 
+    // TODO: This is not the testing standard adhered to by Uptake. There will be a later section for Uptake specific changes.
   - Write a set of tests for every story. Start with an empty test and fill them in as you write the code for the story.
 
     *Why?*: Writing the test descriptions helps clearly define what your story will do, will not do, and how you can measure success.
@@ -2628,7 +2625,7 @@ Unit testing helps maintain clean code, as such I included some of my recommenda
 
 ### Alleviate Globals for JSHint Rules on Tests
 ###### [Style [Y196](#style-y196)]
-
+ - *Uptake Note*: We use ESLint instead.
   - Relax the rules on your test code to allow for common globals such as `describe` and `expect`. Relax the rules for expressions, as Mocha uses these.
 
     *Why?*: Your tests are code and require the same attention and code quality rules as all of your production code. However, global variables used by the testing framework, for example, can be relaxed by including this in your test specs.
@@ -2711,7 +2708,7 @@ Unit testing helps maintain clean code, as such I included some of my recommenda
 
 ### jsDoc
 ###### [Style [Y220](#style-y220)]
-
+  - Prefer use of `ngDoc` which is an extension of `jsDoc`. Generate docs by running `up doc` on the cli.
   - If planning to produce documentation, use [`jsDoc`](http://usejsdoc.org/) syntax to document function names, description, params and returns. Use `@namespace` and `@memberOf` to match your app structure.
 
     *Why?*: You can generate (and regenerate) documentation from your code, instead of writing it from scratch.
